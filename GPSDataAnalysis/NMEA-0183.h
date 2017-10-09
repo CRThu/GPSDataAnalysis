@@ -18,7 +18,8 @@
 
 struct GPGGA
 {
-    // $GPGGA, 102006.60, 3105.56366, N, 12131.98347, E, 1, 06, 1.56, 8.4, M, 10.0, M, , *50
+    // $GPGGA,        (1)     ,        (2)      ,(3),        (4)        ,(5),(6),(7), (8) , (9)  , M, (10) ,M,(11),(12)*hh
+    // $GPGGA, 102006.60, 3105.56366, N, 12131.98347, E,  1, 06, 1.56, 8.4, M, 10.0,M,      ,      *50
     const string ProtocolCommand = "GPGGA";
     const string ProtocolNameCN = "GPS定位信息";
     const string ProtocolNameEN = "Global Positioning System Fix Data";
@@ -27,14 +28,39 @@ struct GPGGA
     string NorS;                   // (3) 纬度半球                    N/S
     string longitude;            // (4) 经度                          dddmm.mmmmm
     string EorW;                   // (5) 经度半球                   E/W
-    string GPSstatus;            // (6) GPS状态                   0:未定位 /1:非差分定位 /2: 差分定位
-    string SatellitesUsing;     // (7) 定位卫星数量             00~12
+    string GPSstatus;            // (6) GPS状态                   0: 未定位 /1: 非差分定位 /2: 差分定位
+    string SatellitesNum;      // (7) 定位卫星数量             00~12
     string HDOP;                  // (8) 水平精确度因子          0.5~99.9
     string altitude;               // (9) 海拔高度                    -9999.9~9999.9
     string GeoidAltitude;      // (10) 大地水准面高度        -9999.9~9999.9
     string DifferentalTime;   // (11) 差分时间                  秒数
     string DifferentalRef;     // (12) 差分参考基站标号      0000~1023
 };
+
+struct GPGSA
+{
+    // $GPGSA,(1),(2),        {(3.0),(3.1),...,(3.11)}       ,  (4)  ,  (5) ,  (6)   * hh
+    // $GPGSA, A,  3 , 24, 18, 20, 10, 21, 15, , , , , , , 3.39, 1.56, 3.00 * 01
+    const string ProtocolCommand = "GPGSA";
+    const string ProtocolNameCN = "当前卫星信息";
+    const string ProtocolNameEN = "GPS DOP and Active Satellites";
+    string status;                       // (1) 模式                  M: 手动 /A: 自动
+    string LocationType;            // (2) 定位类型           1: 未定位 /2: 2D定位 /3: 3D定位
+    string SatellitesName[12];    // (3) 定位卫星号        01~32
+    string PDOP;                        // (4) 综合精度因子     0.5~99.9
+    string HDOP;                       // (5) 水平精度因子     0.5~99.9
+    string VDOP;                       // (6) 垂直精度因子      0.5~99.9
+};
+
+struct GPGSV
+{
+    //    
+    //    $GPGSV, 3, 1, 10, 05, 07, 123, , 10, 24, 315, 22, 12, 17, 142, 16, 13, 14, 060, *7C
+    //    $GPGSV, 3, 2, 10, 15, 44, 048, 23, 18, 55, 323, 27, 20, 52, 118, 28, 21, 49, 243, 32 * 73
+    //    $GPGSV, 3, 3, 10, 24, 81, 079, 25, 32, 07, 267, *7B
+
+};
+
 
 class NMEA0183
 {
