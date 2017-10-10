@@ -54,10 +54,59 @@ struct GPGSA
 
 struct GPGSV
 {
-    //    
-    //    $GPGSV, 3, 1, 10, 05, 07, 123, , 10, 24, 315, 22, 12, 17, 142, 16, 13, 14, 060, *7C
-    //    $GPGSV, 3, 2, 10, 15, 44, 048, 23, 18, 55, 323, 27, 20, 52, 118, 28, 21, 49, 243, 32 * 73
-    //    $GPGSV, 3, 3, 10, 24, 81, 079, 25, 32, 07, 267, *7B
+    //    $GPGSV,(1),(2), (3),{(4), (5), (6) ,(7)},{(4), (5), (6) , (7)},{(4), (5), (6) ,(7)},{(4), (5), (6) ,(7)}*hh
+    //    $GPGSV, 3 , 1 , 10, 05, 07, 123,     , 10, 24, 315, 22, 12, 17, 142, 16, 13, 14, 060,     *7C
+    //    $GPGSV, 3 , 2 , 10, 15, 44, 048, 23, 18, 55, 323, 27, 20, 52, 118, 28, 21, 49, 243, 32 * 73
+    //    $GPGSV, 3 , 3 , 10, 24, 81, 079, 25, 32, 07, 267, *7B
+    const string ProtocolCommand = "GPGSV";
+    const string ProtocolNameCN = "可见卫星数";
+    const string ProtocolNameEN = "GPS Satellites in View";
+    string GSVall;                      // (1) GSV语句总数
+    string GSVnow;                   // (2) 本句GSV编号
+    string SeeSatellitesNum;     // (3) 可见卫星总数
+    vector<SatellitesInViewData> SatellitesData;
+    //string Name;                    // (4) 卫星编号
+    //string AngleOfElevation;   // (5) 卫星仰角                00~90
+    //string AngleOfAzimuth;    // (6) 卫星方位角             000~359
+    //string SNR;                       // (7) 信噪比                   00~99
+};
+
+struct SatellitesInViewData
+{
+    string Name;                    // (4) 卫星编号
+    string AngleOfElevation;   // (5) 卫星仰角                00~90
+    string AngleOfAzimuth;    // (6) 卫星方位角             000~359
+    string SNR;                       // (7) 信噪比                   00~99
+};
+
+struct GPRMC
+{
+    //    $GPRMC,      (1)      ,(2),        (3)      ,(4),        (5)        ,(6),   (7)   ,    (8)   ,    (9)    ,(10),(11),(12)* hh
+    //    $GPRMC, 102006.60, A, 3105.56366, N, 12131.98347, E, 21.014, 254.28, 071017,     ,     , A   * 54
+    const string ProtocolCommand = "GPRMC";
+    const string ProtocolNameCN = "推荐定位信息";
+    const string ProtocolNameEN = "Recommended Minimum Specific GPS/TRANSIT Data";
+    string UTCtime;                      // (1) UTC时间                  hhmmss.ss
+    string status;                          // (2) 定位状态                  A: 有效定位 /V: 无效定位
+    string latitude;                       // (3) 纬度                         ddmm.mmmmm
+    string NorS;                           // (4) 纬度半球                   N/S
+    string longitude;                    // (5) 经度                         dddmm.mmmmm
+    string EorW;                          // (6) 经度半球                   E/W 
+    string speed;                         // (7) 地面速率                   000.0~999.9 节
+    string direction;                     // (8) 地面航向                   000.0~359.9 度
+    string UTCdate;                     // (9) UTC日期                   ddmmyy
+    string MagneticDeclination;  // (10) 磁偏角                     000.0~180.0 度
+    string MagneticDirection;      // (11) 磁偏角方向              E/W
+    string model;                         // (12) 模式指示                 A: 自主定位 /D: 差分定位 /E: 估算 /N: 数据无效
+};
+
+struct GPVTG
+{
+    //    $GPVTG,    (1)   ,
+    //    $GPVTG, 254.28, T, , M, 21.014, N, 38.917, K, A * 36
+    const string ProtocolCommand = "GPVTG";
+    const string ProtocolNameCN = "地面速度信息";
+    const string ProtocolNameEN = "Track Make Good and Ground Speed";
 
 };
 
