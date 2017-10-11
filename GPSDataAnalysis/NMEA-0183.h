@@ -107,23 +107,55 @@ struct GPVTG
     const string ProtocolCommand = "GPVTG";
     const string ProtocolNameCN = "地面速度信息";
     const string ProtocolNameEN = "Track Make Good and Ground Speed";
-    string North;                   // (1) 正北基准航向       000~359 度
-    string MagneticNorth;    // (2) 磁北基准航向        000~359 度
-    string SpeedKnot;           // (3) 地面速率(节)        000.0~999.9 节
-    string SpeedKm;             // (4) 地面速率(公里)     000.0~1851.8 公里/小时
-    string status;                  // (5) 模式                    A: 自主定位 /D: 差分定位 /E: 估算 /N: 数据无效
+    string North;                   // (1) 正北基准航向              000~359 度
+    string MagneticNorth;    // (2) 磁北基准航向              000~359 度
+    string SpeedKnot;           // (3) 地面速率(节)               000.0~999.9 节
+    string SpeedKm;             // (4) 地面速率(公里)            000.0~1851.8 公里/小时
+    string model;                  // (5) 模式指示                    A: 自主定位 /D: 差分定位 /E: 估算 /N: 数据无效
 };
 
+struct GPGLL
+{
+    //    $GPGLL,        (1)      ,(2),        (3)        ,(4),      (5)      ,(6),(7)* hh
+    //    $GPGLL, 3105.56366, N, 12131.98347, E, 102006.60, A, A * 6C
+    const string ProtocolCommand = "GPGLL";
+    const string ProtocolNameCN = "地理定位信息";
+    const string ProtocolNameEN = "Geographic Position";
+    string latitude;                       // (1) 纬度                         ddmm.mmmmm
+    string NorS;                           // (2) 纬度半球                   N/S
+    string longitude;                    // (3) 经度                         dddmm.mmmmm
+    string EorW;                          // (4) 经度半球                   E/W 
+    string UTCtime;                     // (5) UTC时间                   hhmmss.ss
+    string status;                         // (6) 定位状态                   A: 有效定位 /V: 无效定位
+    string model;                        // (7) 模式指示                   A: 自主定位 /D: 差分定位 /E: 估算 /N: 数据无效
+};
 
 class NMEA0183
 {
 
 public:
+    // *Frame
     void SetFrame(string __GPSDataFrame);
-    void Refresh();
+    // GPGGA
+    GPGGA GPGGADataFrame;
+    int GPGGARefresh();
+    // GPGLL
+    GPGLL GPGLLDataFrame;
+    int GPGLLRefresh();
+    // GPGSA
+    GPGSA GPGSADataFrame;
+    int GPGSARefresh();
+    // GPGSV
+    GPGSV GPGSVDataFrame;
+    int GPGSVRefresh();
+    // GPRMC
+    GPRMC GPRMCDataFrame;
+    int GPRMCRefresh();
+    // GPVTG
+    GPVTG GPVTGDataFrame;
+    int GPVTGRefresh();
 private:
-    string GPSDataFrame;
-    GPGGA a;
-    
+    string DataFrame;
+
 };
 #endif // !NMEA-0183
