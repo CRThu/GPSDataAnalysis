@@ -102,12 +102,16 @@ struct GPRMC
 
 struct GPVTG
 {
-    //    $GPVTG,    (1)   ,
-    //    $GPVTG, 254.28, T, , M, 21.014, N, 38.917, K, A * 36
+    //    $GPVTG,    (1)   , T,(2),M,    (3)   , N,     (4)   , K,(5)* hh
+    //    $GPVTG, 254.28, T,   , M, 21.014, N, 38.917, K, A * 36
     const string ProtocolCommand = "GPVTG";
     const string ProtocolNameCN = "地面速度信息";
     const string ProtocolNameEN = "Track Make Good and Ground Speed";
-
+    string North;                   // (1) 正北基准航向       000~359 度
+    string MagneticNorth;    // (2) 磁北基准航向        000~359 度
+    string SpeedKnot;           // (3) 地面速率(节)        000.0~999.9 节
+    string SpeedKm;             // (4) 地面速率(公里)     000.0~1851.8 公里/小时
+    string status;                  // (5) 模式                    A: 自主定位 /D: 差分定位 /E: 估算 /N: 数据无效
 };
 
 
