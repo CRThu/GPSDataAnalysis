@@ -1,8 +1,8 @@
 // Analysis GPS NMEA-0183 Protocol
 #ifndef NMEA-0183
-
 #include "stdafx.h"
 
+#define DEBUG_CALC 1
 
 //    GPS Frame Example : 
 //    
@@ -23,20 +23,20 @@ struct GPGGA
     // $GPGGA, 102006.60, 3105.56366, N, 12131.98347, E,  1, 06, 1.56, 8.4, M, 10.0,M,      ,      *50
     string RawFrame;
     const string ProtocolCommand = "GPGGA";
-    const string ProtocolNameCN = "GPSå®šä½ä¿¡æ¯";
+    const string ProtocolNameCN = "GPS¶¨Î»ĞÅÏ¢";
     const string ProtocolNameEN = "Global Positioning System Fix Data";
-    string UTCtime;              // (1) UTCæ—¶é—´                   hhmmss.ss
-    string latitude;               // (2) çº¬åº¦                          ddmm.mmmmm
-    string NorS;                   // (3) çº¬åº¦åŠçƒ                    N/S
-    string longitude;            // (4) ç»åº¦                          dddmm.mmmmm
-    string EorW;                   // (5) ç»åº¦åŠçƒ                   E/W
-    string GPSstatus;            // (6) GPSçŠ¶æ€                   0: æœªå®šä½ /1: éå·®åˆ†å®šä½ /2: å·®åˆ†å®šä½
-    string SatellitesNum;      // (7) å®šä½å«æ˜Ÿæ•°é‡             00~12
-    string HDOP;                  // (8) æ°´å¹³ç²¾ç¡®åº¦å› å­          0.5~99.9
-    string altitude;               // (9) æµ·æ‹”é«˜åº¦                    -9999.9~9999.9
-    string GeoidAltitude;      // (10) å¤§åœ°æ°´å‡†é¢é«˜åº¦        -9999.9~9999.9
-    string DifferentalTime;   // (11) å·®åˆ†æ—¶é—´                  ç§’æ•°
-    string DifferentalRef;     // (12) å·®åˆ†å‚è€ƒåŸºç«™æ ‡å·      0000~1023
+    string UTCtime;              // (1) UTCÊ±¼ä                   hhmmss.ss
+    string latitude;               // (2) Î³¶È                          ddmm.mmmmm
+    string NorS;                   // (3) Î³¶È°ëÇò                    N/S
+    string longitude;            // (4) ¾­¶È                          dddmm.mmmmm
+    string EorW;                   // (5) ¾­¶È°ëÇò                   E/W
+    string GPSstatus;            // (6) GPS×´Ì¬                   0: Î´¶¨Î» /1: ·Ç²î·Ö¶¨Î» /2: ²î·Ö¶¨Î»
+    string SatellitesNum;      // (7) ¶¨Î»ÎÀĞÇÊıÁ¿             00~12
+    string HDOP;                  // (8) Ë®Æ½¾«È·¶ÈÒò×Ó          0.5~99.9
+    string altitude;               // (9) º£°Î¸ß¶È                    -9999.9~9999.9
+    string GeoidAltitude;      // (10) ´óµØË®×¼Ãæ¸ß¶È        -9999.9~9999.9
+    string DifferentalTime;   // (11) ²î·ÖÊ±¼ä                  ÃëÊı
+    string DifferentalRef;     // (12) ²î·Ö²Î¿¼»ùÕ¾±êºÅ      0000~1023
 };
 
 struct GPGSA
@@ -45,22 +45,22 @@ struct GPGSA
     // $GPGSA, A,  3 , 24, 18, 20, 10, 21, 15, , , , , , , 3.39, 1.56, 3.00 * 01
     string RawFrame;
     const string ProtocolCommand = "GPGSA";
-    const string ProtocolNameCN = "å½“å‰å«æ˜Ÿä¿¡æ¯";
+    const string ProtocolNameCN = "µ±Ç°ÎÀĞÇĞÅÏ¢";
     const string ProtocolNameEN = "GPS DOP and Active Satellites";
-    string status;                       // (1) æ¨¡å¼                  M: æ‰‹åŠ¨ /A: è‡ªåŠ¨
-    string LocationType;            // (2) å®šä½ç±»å‹           1: æœªå®šä½ /2: 2Då®šä½ /3: 3Då®šä½
-    string SatellitesName[12];    // (3) å®šä½å«æ˜Ÿå·        01~32
-    string PDOP;                        // (4) ç»¼åˆç²¾åº¦å› å­     0.5~99.9
-    string HDOP;                       // (5) æ°´å¹³ç²¾åº¦å› å­     0.5~99.9
-    string VDOP;                       // (6) å‚ç›´ç²¾åº¦å› å­      0.5~99.9
+    string status;                       // (1) Ä£Ê½                  M: ÊÖ¶¯ /A: ×Ô¶¯
+    string LocationType;            // (2) ¶¨Î»ÀàĞÍ           1: Î´¶¨Î» /2: 2D¶¨Î» /3: 3D¶¨Î»
+    string SatellitesName[12];    // (3) ¶¨Î»ÎÀĞÇºÅ        01~32
+    string PDOP;                        // (4) ×ÛºÏ¾«¶ÈÒò×Ó     0.5~99.9
+    string HDOP;                       // (5) Ë®Æ½¾«¶ÈÒò×Ó     0.5~99.9
+    string VDOP;                       // (6) ´¹Ö±¾«¶ÈÒò×Ó      0.5~99.9
 };
 
 struct SatellitesInViewData
 {
-    string Name;                    // (4) å«æ˜Ÿç¼–å·
-    string AngleOfElevation;   // (5) å«æ˜Ÿä»°è§’                00~90
-    string AngleOfAzimuth;    // (6) å«æ˜Ÿæ–¹ä½è§’             000~359
-    string SNR;                       // (7) ä¿¡å™ªæ¯”                   00~99
+    string Name;                    // (4) ÎÀĞÇ±àºÅ
+    string AngleOfElevation;   // (5) ÎÀĞÇÑö½Ç                00~90
+    string AngleOfAzimuth;    // (6) ÎÀĞÇ·½Î»½Ç             000~359
+    string SNR;                       // (7) ĞÅÔë±È                   00~99
 };
 
 struct GPGSV
@@ -69,18 +69,18 @@ struct GPGSV
     //    $GPGSV, 3 , 1 , 10, 05, 07, 123,     , 10, 24, 315, 22, 12, 17, 142, 16, 13, 14, 060,     *7C
     //    $GPGSV, 3 , 2 , 10, 15, 44, 048, 23, 18, 55, 323, 27, 20, 52, 118, 28, 21, 49, 243, 32 * 73
     //    $GPGSV, 3 , 3 , 10, 24, 81, 079, 25, 32, 07, 267, *7B
-    string RawFrame;
+    vector<string> RawFrame;
     const string ProtocolCommand = "GPGSV";
-    const string ProtocolNameCN = "å¯è§å«æ˜Ÿæ•° ";
+    const string ProtocolNameCN = "¿É¼ûÎÀĞÇÊı ";
     const string ProtocolNameEN = "GPS Satellites in View";
-    string GSVall;                      // (1) GSVè¯­å¥æ€»æ•°
-    string GSVnow;                   // (2) æœ¬å¥GSVç¼–å·
-    string SeeSatellitesNum;     // (3) å¯è§å«æ˜Ÿæ€»æ•°
+    string GSVall;                      // (1) GSVÓï¾ä×ÜÊı
+    string GSVnow;                   // (2) ±¾¾äGSV±àºÅ
+    string SeeSatellitesNum;     // (3) ¿É¼ûÎÀĞÇ×ÜÊı
     vector<SatellitesInViewData> SatellitesData;
-    //string Name;                    // (4) å«æ˜Ÿç¼–å·
-    //string AngleOfElevation;   // (5) å«æ˜Ÿä»°è§’                00~90
-    //string AngleOfAzimuth;    // (6) å«æ˜Ÿæ–¹ä½è§’             000~359
-    //string SNR;                       // (7) ä¿¡å™ªæ¯”                   00~99
+    //string Name;                    // (4) ÎÀĞÇ±àºÅ
+    //string AngleOfElevation;   // (5) ÎÀĞÇÑö½Ç                00~90
+    //string AngleOfAzimuth;    // (6) ÎÀĞÇ·½Î»½Ç             000~359
+    //string SNR;                       // (7) ĞÅÔë±È                   00~99
 };
 
 struct GPRMC
@@ -89,20 +89,20 @@ struct GPRMC
     //    $GPRMC, 102006.60, A, 3105.56366, N, 12131.98347, E, 21.014, 254.28, 071017,     ,     , A   * 54
     string RawFrame;
     const string ProtocolCommand = "GPRMC";
-    const string ProtocolNameCN = "æ¨èå®šä½ä¿¡æ¯";
+    const string ProtocolNameCN = "ÍÆ¼ö¶¨Î»ĞÅÏ¢";
     const string ProtocolNameEN = "Recommended Minimum Specific GPS/TRANSIT Data";
-    string UTCtime;                      // (1) UTCæ—¶é—´                  hhmmss.ss
-    string status;                          // (2) å®šä½çŠ¶æ€                  A: æœ‰æ•ˆå®šä½ /V: æ— æ•ˆå®šä½
-    string latitude;                       // (3) çº¬åº¦                         ddmm.mmmmm
-    string NorS;                           // (4) çº¬åº¦åŠçƒ                   N/S
-    string longitude;                    // (5) ç»åº¦                         dddmm.mmmmm
-    string EorW;                          // (6) ç»åº¦åŠçƒ                   E/W 
-    string speed;                         // (7) åœ°é¢é€Ÿç‡                   000.0~999.9 èŠ‚
-    string direction;                     // (8) åœ°é¢èˆªå‘                   000.0~359.9 åº¦
-    string UTCdate;                     // (9) UTCæ—¥æœŸ                   ddmmyy
-    string MagneticDeclination;  // (10) ç£åè§’                     000.0~180.0 åº¦
-    string MagneticDirection;      // (11) ç£åè§’æ–¹å‘              E/W
-    string model;                         // (12) æ¨¡å¼æŒ‡ç¤º                 A: è‡ªä¸»å®šä½ /D: å·®åˆ†å®šä½ /E: ä¼°ç®— /N: æ•°æ®æ— æ•ˆ
+    string UTCtime;                      // (1) UTCÊ±¼ä                  hhmmss.ss
+    string status;                          // (2) ¶¨Î»×´Ì¬                  A: ÓĞĞ§¶¨Î» /V: ÎŞĞ§¶¨Î»
+    string latitude;                       // (3) Î³¶È                         ddmm.mmmmm
+    string NorS;                           // (4) Î³¶È°ëÇò                   N/S
+    string longitude;                    // (5) ¾­¶È                         dddmm.mmmmm
+    string EorW;                          // (6) ¾­¶È°ëÇò                   E/W 
+    string speed;                         // (7) µØÃæËÙÂÊ                   000.0~999.9 ½Ú
+    string direction;                     // (8) µØÃæº½Ïò                   000.0~359.9 ¶È
+    string UTCdate;                     // (9) UTCÈÕÆÚ                   ddmmyy
+    string MagneticDeclination;  // (10) ´ÅÆ«½Ç                     000.0~180.0 ¶È
+    string MagneticDirection;      // (11) ´ÅÆ«½Ç·½Ïò              E/W
+    string model;                         // (12) Ä£Ê½Ö¸Ê¾                 A: ×ÔÖ÷¶¨Î» /D: ²î·Ö¶¨Î» /E: ¹ÀËã /N: Êı¾İÎŞĞ§
 };
 
 struct GPVTG
@@ -111,13 +111,13 @@ struct GPVTG
     //    $GPVTG, 254.28, T,   , M, 21.014, N, 38.917, K, A * 36
     string RawFrame;
     const string ProtocolCommand = "GPVTG";
-    const string ProtocolNameCN = "åœ°é¢é€Ÿåº¦ä¿¡æ¯";
+    const string ProtocolNameCN = "µØÃæËÙ¶ÈĞÅÏ¢";
     const string ProtocolNameEN = "Track Make Good and Ground Speed";
-    string North;                   // (1) æ­£åŒ—åŸºå‡†èˆªå‘              000~359 åº¦
-    string MagneticNorth;    // (2) ç£åŒ—åŸºå‡†èˆªå‘              000~359 åº¦
-    string SpeedKnot;           // (3) åœ°é¢é€Ÿç‡(èŠ‚)               000.0~999.9 èŠ‚
-    string SpeedKm;             // (4) åœ°é¢é€Ÿç‡(å…¬é‡Œ)            000.0~1851.8 å…¬é‡Œ/å°æ—¶
-    string model;                  // (5) æ¨¡å¼æŒ‡ç¤º                    A: è‡ªä¸»å®šä½ /D: å·®åˆ†å®šä½ /E: ä¼°ç®— /N: æ•°æ®æ— æ•ˆ
+    string North;                   // (1) Õı±±»ù×¼º½Ïò              000~359 ¶È
+    string MagneticNorth;    // (2) ´Å±±»ù×¼º½Ïò              000~359 ¶È
+    string SpeedKnot;           // (3) µØÃæËÙÂÊ(½Ú)               000.0~999.9 ½Ú
+    string SpeedKm;             // (4) µØÃæËÙÂÊ(¹«Àï)            000.0~1851.8 ¹«Àï/Ğ¡Ê±
+    string model;                  // (5) Ä£Ê½Ö¸Ê¾                    A: ×ÔÖ÷¶¨Î» /D: ²î·Ö¶¨Î» /E: ¹ÀËã /N: Êı¾İÎŞĞ§
 };
 
 struct GPGLL
@@ -126,15 +126,15 @@ struct GPGLL
     //    $GPGLL, 3105.56366, N, 12131.98347, E, 102006.60, A, A * 6C
     string RawFrame;
     const string ProtocolCommand = "GPGLL";
-    const string ProtocolNameCN = "åœ°ç†å®šä½ä¿¡æ¯";
+    const string ProtocolNameCN = "µØÀí¶¨Î»ĞÅÏ¢";
     const string ProtocolNameEN = "Geographic Position";
-    string latitude;                       // (1) çº¬åº¦                         ddmm.mmmmm
-    string NorS;                           // (2) çº¬åº¦åŠçƒ                   N/S
-    string longitude;                    // (3) ç»åº¦                         dddmm.mmmmm
-    string EorW;                          // (4) ç»åº¦åŠçƒ                   E/W 
-    string UTCtime;                     // (5) UTCæ—¶é—´                   hhmmss.ss
-    string status;                         // (6) å®šä½çŠ¶æ€                   A: æœ‰æ•ˆå®šä½ /V: æ— æ•ˆå®šä½
-    string model;                        // (7) æ¨¡å¼æŒ‡ç¤º                   A: è‡ªä¸»å®šä½ /D: å·®åˆ†å®šä½ /E: ä¼°ç®— /N: æ•°æ®æ— æ•ˆ
+    string latitude;                       // (1) Î³¶È                         ddmm.mmmmm
+    string NorS;                           // (2) Î³¶È°ëÇò                   N/S
+    string longitude;                    // (3) ¾­¶È                         dddmm.mmmmm
+    string EorW;                          // (4) ¾­¶È°ëÇò                   E/W 
+    string UTCtime;                     // (5) UTCÊ±¼ä                   hhmmss.ss
+    string status;                         // (6) ¶¨Î»×´Ì¬                   A: ÓĞĞ§¶¨Î» /V: ÎŞĞ§¶¨Î»
+    string model;                        // (7) Ä£Ê½Ö¸Ê¾                   A: ×ÔÖ÷¶¨Î» /D: ²î·Ö¶¨Î» /E: ¹ÀËã /N: Êı¾İÎŞĞ§
 };
 
 class NMEA0183
@@ -144,7 +144,7 @@ public:
     // *Frame
     void CleanFrame();
     void TrimFrame(string &s);
-    void SetFrame(string __GPSDataFrame);
+    int SetFrame(string __GPSDataFrame);    // return Protocol Lines
     // GPGGA
     GPGGA GPGGADataFrame;
     int GPGGARefresh();

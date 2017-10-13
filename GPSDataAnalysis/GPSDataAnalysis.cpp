@@ -6,6 +6,7 @@
 
 int main()
 {
+    system("CHCP 936");
     string data = "$GPRMC, 232530.00, A, 3359.08811, N, 11850.91461, E, 430.275, 7.74, 071017, , , A * 62 \
         $GPVTG, 7.74, T, , M, 430.275, N, 796.869, K, A * 31 \
         $GPGGA, 232530.00, 3359.08811, N, 11850.91461, E, 1, 09, 1.06, 8622.3, M, 1.8, M, , *59 \
@@ -16,7 +17,10 @@ int main()
         $GPGLL, 3359.08811, N, 11850.91461, E, 232530.00, A, A * 66";
     NMEA0183 GPS;
     GPS.CleanFrame();
-    GPS.SetFrame(data);
+#if DEBUG_CALC == 1
+        cout << "return GPS.SetFrame(data) : " << GPS.SetFrame(data) << endl;
+#endif
+    //cout << GPS.GPGGADataFrame.ProtocolNameCN;
 
     return 0;
 }

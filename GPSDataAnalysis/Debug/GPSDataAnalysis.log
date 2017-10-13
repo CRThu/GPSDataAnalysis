@@ -1,9 +1,9 @@
-﻿  NMEA-0183.cpp
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+﻿  stdafx.cpp
+  NMEA-0183.cpp
 d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.h(2): warning C4067: 预处理器指令后有意外标记 - 应输入换行符
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(31): warning C4018: “<”: 有符号/无符号不匹配
-  正在生成代码...
-  正在跳过...(未检测到相关更改)
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(32): warning C4018: “<”: 有符号/无符号不匹配
   GPSDataAnalysis.cpp
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.h(2): warning C4067: 预处理器指令后有意外标记 - 应输入换行符
+  正在生成代码...
   GPSDataAnalysis.vcxproj -> D:\program\C&CPP_2017\GPSDataAnalysis\Debug\GPSDataAnalysis.exe
   GPSDataAnalysis.vcxproj -> D:\program\C&CPP_2017\GPSDataAnalysis\Debug\GPSDataAnalysis.pdb (Full PDB)
