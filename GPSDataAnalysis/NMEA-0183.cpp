@@ -11,7 +11,6 @@ void NMEA0183::CleanFrame()
     GPRMCDataFrame.RawFrame = "";
     GPVTGDataFrame.RawFrame = "";
 }
-
 void NMEA0183::TrimFrame(string &s)
 {
     int index = 0;
@@ -19,7 +18,6 @@ void NMEA0183::TrimFrame(string &s)
         while ((index = s.find(' ', index)) != string::npos)
             s.erase(index, 1);
 }
-
 int NMEA0183::SetFrame(string __GPSDataFrame)
 {
     TrimFrame(__GPSDataFrame);
@@ -64,9 +62,88 @@ int NMEA0183::SetFrame(string __GPSDataFrame)
     }
     return ProtocolCnt;
 }
-
 int NMEA0183::GPGGARefresh()
 {
-    // TODO
+    int QueneEnd;
+    string QueneData;
+    int QueneCnt = 1;
+    unsigned int GetChecksum;
+    unsigned int CalcChecksum = 0;
+    bool CheckByte=false;
+    for (int i = 0; i < GPGGADataFrame.RawFrame.length(); i++)
+    {
+
+        if (GPGGADataFrame.RawFrame[i] == '*')
+            CheckByte = false;
+        if (CheckByte)
+            CalcChecksum ^= GPGGADataFrame.RawFrame[i];
+        if (GPGGADataFrame.RawFrame[i] == '$')
+        {
+            CheckByte = true;
+            CalcChecksum = 0;
+        }
+        if (GPGGADataFrame.RawFrame[i] == ',' || GPGGADataFrame.RawFrame[i] == '*')     // DataBegin
+        {
+            for (int j = i+1; j < GPGGADataFrame.RawFrame.length()
+                && GPGGADataFrame.RawFrame[j] != ','
+                && GPGGADataFrame.RawFrame[j] != '*'; j++)    // DataEnd
+                QueneEnd = j;
+            QueneData = GPGGADataFrame.RawFrame.substr(i + 1, (QueneEnd - i)<0?0: QueneEnd - i);
+
+            switch (QueneCnt)   // Transfer to struct
+            {
+            case 1:     // (1)
+                GPGGADataFrame.UTCtime = QueneData;
+                break;
+            case 2:     // (2)
+                GPGGADataFrame.latitude = QueneData;
+                break;
+            case 3:     // (3)
+                GPGGADataFrame.NorS = QueneData;
+                break;
+            case 4:     // (4)
+                GPGGADataFrame.longitude = QueneData;
+                break;
+            case 5:     // (5)
+                GPGGADataFrame.EorW = QueneData;
+                break;
+            case 6:     // (6)
+                GPGGADataFrame.GPSstatus = QueneData;
+                break;
+            case 7:     // (7)
+                GPGGADataFrame.SatellitesNum = QueneData;
+                break;
+            case 8:     // (8)
+                GPGGADataFrame.HDOP = QueneData;
+                break;
+            case 9:     // (9)
+                GPGGADataFrame.altitude = QueneData;
+                break;
+            case 10:    // M
+                break;
+            case 11:    // (10)
+                GPGGADataFrame.GeoidAltitude = QueneData;
+                break;
+            case 12:    // M
+                break;
+            case 13:    // (11)
+                GPGGADataFrame.DifferentalTime = QueneData;
+                break;
+            case 14:    // (12)
+                GPGGADataFrame.DifferentalRef = QueneData;
+                break;
+            case 15:    // checksum
+                // TODO
+                //GetChecksum = (QueneData[0]) << 4 + HexToInt(QueneData[1]);
+#if DEBUG_CALC == 1
+                    cout << "GPS.GPGGARefresh().GetChecksum : " << GetChecksum << endl;
+                    cout << "GPS.GPGGARefresh().CalcChecksum : " << CalcChecksum << endl;
+#endif
+                break;
+            }
+            QueneCnt++;
+        }
+    }
+
     return 0;
 }

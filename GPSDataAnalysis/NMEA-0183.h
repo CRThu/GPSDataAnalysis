@@ -139,7 +139,6 @@ struct GPGLL
 
 class NMEA0183
 {
-
 public:
     // *Frame
     void CleanFrame();
@@ -166,4 +165,5 @@ public:
 
 private:
 };
+
 #endif // !NMEA-0183

@@ -20,8 +20,9 @@ int main()
 #if DEBUG_CALC == 1
         cout << "return GPS.SetFrame(data) : " << GPS.SetFrame(data) << endl;
 #endif
+        GPS.GPGGARefresh();
     //cout << GPS.GPGGADataFrame.ProtocolNameCN;
-
+        getchar();
     return 0;
 }
 
