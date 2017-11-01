@@ -21,8 +21,9 @@ int main()
         cout << "return GPS.SetFrame(data) : " << GPS.SetFrame(data) << endl;
 #endif
         GPS.GPGGARefresh();
+        GPS.GPGSARefresh();
     //cout << GPS.GPGGADataFrame.ProtocolNameCN;
-        getchar();
+    getchar();
     return 0;
 }
 

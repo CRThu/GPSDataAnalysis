@@ -79,6 +79,7 @@ int NMEA0183::SetFrame(string __GPSDataFrame)
     }
     return ProtocolCnt;
 }
+
 int NMEA0183::GPGGARefresh()
 {
     int QueneEnd;
@@ -154,6 +155,69 @@ int NMEA0183::GPGGARefresh()
 #if DEBUG_CALC == 1
                     cout << "GPS.GPGGARefresh().GetChecksum : " << GetChecksum << endl;
                     cout << "GPS.GPGGARefresh().CalcChecksum : " << CalcChecksum << endl;
+#endif
+                break;
+            }
+            QueneCnt++;
+        }
+    }
+    return 0;
+}
+
+int NMEA0183::GPGSARefresh()
+{
+    int QueneEnd;
+    string QueneData;
+    int QueneCnt = 1;
+    unsigned int GetChecksum;
+    unsigned int CalcChecksum = 0;
+    bool CheckByte = false;
+    for (int i = 0; i < GPGSADataFrame.RawFrame.length(); i++)
+    {
+        if (GPGSADataFrame.RawFrame[i] == '*')
+            CheckByte = false;
+        if (CheckByte)
+            CalcChecksum ^= GPGSADataFrame.RawFrame[i];
+        if (GPGSADataFrame.RawFrame[i] == '$')
+        {
+            CheckByte = true;
+            CalcChecksum = 0;
+        }
+        if (GPGSADataFrame.RawFrame[i] == ',' || GPGSADataFrame.RawFrame[i] == '*')     // DataBegin
+        {
+            for (int j = i + 1; j < GPGSADataFrame.RawFrame.length()
+                && GPGSADataFrame.RawFrame[j] != ','
+                && GPGSADataFrame.RawFrame[j] != '*'; j++)    // DataEnd
+                QueneEnd = j;
+            QueneData = GPGSADataFrame.RawFrame.substr(i + 1, (QueneEnd - i)<0 ? 0 : QueneEnd - i);
+
+            switch (QueneCnt)   // Transfer to struct
+            {
+            case 1:     // (1)
+                GPGSADataFrame.status = QueneData;
+                break;
+            case 2:     // (2)
+                GPGSADataFrame.LocationType = QueneData;
+                break;
+            case 3:     case 4:     case 5:     case 6: 
+            case 7:     case 8:     case 9:     case 10:
+            case 11:   case 12:    case 13:   case 14:    // {(3.0)~(3.11)}
+                GPGSADataFrame.SatellitesName[QueneCnt - 3] = QueneData;
+                break;
+            case 15:    // (4)
+                GPGSADataFrame.PDOP = QueneData;
+                break;
+            case 16:    // (5)
+                GPGSADataFrame.HDOP = QueneData;
+                break;
+            case 17:    // (6)
+                GPGSADataFrame.VDOP = QueneData;
+                break;
+            case 18:    // checksum
+                GetChecksum = GetCheckSum(QueneData);
+#if DEBUG_CALC == 1
+                cout << "GPS.GPGSARefresh().GetChecksum : " << GetChecksum << endl;
+                cout << "GPS.GPGSARefresh().CalcChecksum : " << CalcChecksum << endl;
 #endif
                 break;
             }
