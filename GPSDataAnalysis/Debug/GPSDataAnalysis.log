@@ -1,9 +1,10 @@
 ﻿  NMEA-0183.cpp
 d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.h(2): warning C4067: 预处理器指令后有意外标记 - 应输入换行符
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(40): warning C4018: “<”: 有符号/无符号不匹配
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(83): warning C4018: “<”: 有符号/无符号不匹配
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(98): warning C4018: “<”: 有符号/无符号不匹配
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(146): warning C4554: “<<”: 检查运算符优先级可能存在的错误；使用圆括号阐明优先级
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(13): warning C4715: “HexToInt”: 不是所有的控件路径都返回值
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(47): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(90): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(104): warning C4018: “<”: 有符号/无符号不匹配
+  GPSDataAnalysis.cpp
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.h(2): warning C4067: 预处理器指令后有意外标记 - 应输入换行符
+  正在生成代码...
   GPSDataAnalysis.vcxproj -> D:\program\C&CPP_2017\GPSDataAnalysis\Debug\GPSDataAnalysis.exe
   GPSDataAnalysis.vcxproj -> D:\program\C&CPP_2017\GPSDataAnalysis\Debug\GPSDataAnalysis.pdb (Full PDB)

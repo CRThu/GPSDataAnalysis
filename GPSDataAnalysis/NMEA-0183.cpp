@@ -1,6 +1,23 @@
 // Analysis GPS NMEA-0183 Protocol
 #include "stdafx.h"
 #include "NMEA-0183.h"
+int HexToInt(char _input)
+{
+    if (_input >= '0'&&_input <= '9')
+        return _input - '0';
+    else
+        if (_input >= 'a'&&_input <= 'f')
+            return _input - 'a' + 10;
+        else
+            if (_input >= 'A'&&_input <= 'F')
+                return _input - 'A' + 10;
+            else
+                return -1;
+}
+int GetCheckSum(string _input)
+{
+    return HexToInt(_input[0]) * 16 + HexToInt(_input[1]);
+}
 
 void NMEA0183::CleanFrame()
 {
@@ -72,7 +89,6 @@ int NMEA0183::GPGGARefresh()
     bool CheckByte=false;
     for (int i = 0; i < GPGGADataFrame.RawFrame.length(); i++)
     {
-
         if (GPGGADataFrame.RawFrame[i] == '*')
             CheckByte = false;
         if (CheckByte)
@@ -134,7 +150,7 @@ int NMEA0183::GPGGARefresh()
                 break;
             case 15:    // checksum
                 // TODO
-                //GetChecksum = (QueneData[0]) << 4 + HexToInt(QueneData[1]);
+                GetChecksum = GetCheckSum(QueneData);
 #if DEBUG_CALC == 1
                     cout << "GPS.GPGGARefresh().GetChecksum : " << GetChecksum << endl;
                     cout << "GPS.GPGGARefresh().CalcChecksum : " << CalcChecksum << endl;
@@ -144,6 +160,5 @@ int NMEA0183::GPGGARefresh()
             QueneCnt++;
         }
     }
-
     return 0;
 }
