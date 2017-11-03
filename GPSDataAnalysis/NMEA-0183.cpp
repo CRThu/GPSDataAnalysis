@@ -150,7 +150,6 @@ int NMEA0183::GPGGARefresh()
                 GPGGADataFrame.DifferentalRef = QueneData;
                 break;
             case 15:    // checksum
-                // TODO
                 GetChecksum = GetCheckSum(QueneData);
 #if DEBUG_CALC == 1
                     cout << "GPS.GPGGARefresh().GetChecksum : " << GetChecksum << endl;
@@ -218,6 +217,91 @@ int NMEA0183::GPGSARefresh()
 #if DEBUG_CALC == 1
                 cout << "GPS.GPGSARefresh().GetChecksum : " << GetChecksum << endl;
                 cout << "GPS.GPGSARefresh().CalcChecksum : " << CalcChecksum << endl;
+#endif
+                break;
+            }
+            QueneCnt++;
+        }
+    }
+    return 0;
+}
+
+int NMEA0183::GPGSVRefresh()
+{
+    // TODO
+    return 0;
+}
+
+int NMEA0183::GPRMCRefresh()
+{
+    int QueneEnd;
+    string QueneData;
+    int QueneCnt = 1;
+    unsigned int GetChecksum;
+    unsigned int CalcChecksum = 0;
+    bool CheckByte = false;
+    for (int i = 0; i < GPRMCDataFrame.RawFrame.length(); i++)
+    {
+        if (GPRMCDataFrame.RawFrame[i] == '*')
+            CheckByte = false;
+        if (CheckByte)
+            CalcChecksum ^= GPRMCDataFrame.RawFrame[i];
+        if (GPRMCDataFrame.RawFrame[i] == '$')
+        {
+            CheckByte = true;
+            CalcChecksum = 0;
+        }
+        if (GPRMCDataFrame.RawFrame[i] == ',' || GPRMCDataFrame.RawFrame[i] == '*')     // DataBegin
+        {
+            for (int j = i + 1; j < GPRMCDataFrame.RawFrame.length()
+                && GPRMCDataFrame.RawFrame[j] != ','
+                && GPRMCDataFrame.RawFrame[j] != '*'; j++)    // DataEnd
+                QueneEnd = j;
+            QueneData = GPRMCDataFrame.RawFrame.substr(i + 1, (QueneEnd - i)<0 ? 0 : QueneEnd - i);
+
+            switch (QueneCnt)   // Transfer to struct
+            {
+            case 1:     // (1)
+                GPRMCDataFrame.UTCtime = QueneData;
+                break;
+            case 2:     // (2)
+                GPRMCDataFrame.status = QueneData;
+                break;
+            case 3:     // (3)
+                GPRMCDataFrame.latitude = QueneData;
+                break;
+            case 4:     // (4)
+                GPRMCDataFrame.NorS = QueneData;
+                break;
+            case 5:     // (5)
+                GPRMCDataFrame.longitude = QueneData;
+                break;
+            case 6:     // (6)
+                GPRMCDataFrame.EorW = QueneData;
+                break;
+            case 7:     // (7)
+                GPRMCDataFrame.speed = QueneData;
+                break;
+            case 8:     // (8)
+                GPRMCDataFrame.direction = QueneData;
+                break;
+            case 9:     // (9)
+                GPRMCDataFrame.UTCdate = QueneData;
+                break;
+            case 10:     // (10)
+                GPRMCDataFrame.MagneticDeclination = QueneData;
+                break;
+            case 11:     // (11)
+                GPRMCDataFrame.MagneticDirection = QueneData;
+                break;
+            case 12:     // (12)
+                GPRMCDataFrame.model = QueneData;
+                break;
+            case 13:    // checksum
+                GetChecksum = GetCheckSum(QueneData);
+#if DEBUG_CALC == 1
+                cout << "GPS.GPRMCRefresh().GetChecksum : " << GetChecksum << endl;
+                cout << "GPS.GPRMCRefresh().CalcChecksum : " << CalcChecksum << endl;
 #endif
                 break;
             }

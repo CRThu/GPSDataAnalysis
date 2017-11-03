@@ -22,6 +22,7 @@ int main()
 #endif
         GPS.GPGGARefresh();
         GPS.GPGSARefresh();
+        GPS.GPRMCRefresh();
     //cout << GPS.GPGGADataFrame.ProtocolNameCN;
     getchar();
     return 0;
