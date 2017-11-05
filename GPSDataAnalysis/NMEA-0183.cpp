@@ -1,6 +1,7 @@
 // Analysis GPS NMEA-0183 Protocol
 #include "stdafx.h"
 #include "NMEA-0183.h"
+
 int HexToInt(char _input)
 {
     if (_input >= '0'&&_input <= '9')
@@ -366,6 +367,72 @@ int NMEA0183::GPRMCRefresh()
 #if DEBUG_CALC == 1
                 cout << "GPS.GPRMCRefresh().GetChecksum : " << GetChecksum << endl;
                 cout << "GPS.GPRMCRefresh().CalcChecksum : " << CalcChecksum << endl;
+#endif
+                break;
+            }
+            QueneCnt++;
+        }
+    }
+    return 0;
+}
+
+int NMEA0183::GPVTGRefresh()
+{
+    int QueneEnd;
+    string QueneData;
+    int QueneCnt = 1;
+    unsigned int GetChecksum;
+    unsigned int CalcChecksum = 0;
+    bool CheckByte = false;
+    for (int i = 0; i < GPVTGDataFrame.RawFrame.length(); i++)
+    {
+        if (GPVTGDataFrame.RawFrame[i] == '*')
+            CheckByte = false;
+        if (CheckByte)
+            CalcChecksum ^= GPVTGDataFrame.RawFrame[i];
+        if (GPVTGDataFrame.RawFrame[i] == '$')
+        {
+            CheckByte = true;
+            CalcChecksum = 0;
+        }
+        if (GPVTGDataFrame.RawFrame[i] == ',' || GPVTGDataFrame.RawFrame[i] == '*')     // DataBegin
+        {
+            for (int j = i + 1; j < GPVTGDataFrame.RawFrame.length()
+                && GPVTGDataFrame.RawFrame[j] != ','
+                && GPVTGDataFrame.RawFrame[j] != '*'; j++)    // DataEnd
+                QueneEnd = j;
+            QueneData = GPVTGDataFrame.RawFrame.substr(i + 1, (QueneEnd - i) < 0 ? 0 : QueneEnd - i);
+
+            switch (QueneCnt)   // Transfer to struct
+            {
+            case 1:     // (1)
+                GPVTGDataFrame.North = QueneData;
+                break;
+            case 2:     // T
+                    break;
+            case 3:     // (2)
+                GPVTGDataFrame.MagneticNorth = QueneData;
+                break;
+            case 4:     // M
+                break;
+            case 5:     // (3)
+                GPVTGDataFrame.SpeedKnot = QueneData;
+                break;
+            case 6:     // N
+                break;
+            case 7:     // (4)
+                GPVTGDataFrame.SpeedKm = QueneData;
+                break;
+            case 8:     // K
+                break;
+            case 9:     // (5)
+                GPVTGDataFrame.model = QueneData;
+                break;
+            case 10:    // checksum
+                GetChecksum = GetCheckSum(QueneData);
+#if DEBUG_CALC == 1
+                cout << "GPS.GPVTGRefresh().GetChecksum : " << GetChecksum << endl;
+                cout << "GPS.GPVTGRefresh().CalcChecksum : " << CalcChecksum << endl;
 #endif
                 break;
             }
