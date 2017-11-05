@@ -163,6 +163,70 @@ int NMEA0183::GPGGARefresh()
     return 0;
 }
 
+int NMEA0183::GPGLLRefresh()
+{
+    int QueneEnd;
+    string QueneData;
+    int QueneCnt = 1;
+    unsigned int GetChecksum;
+    unsigned int CalcChecksum = 0;
+    bool CheckByte = false;
+    for (int i = 0; i < GPGLLDataFrame.RawFrame.length(); i++)
+    {
+        if (GPGLLDataFrame.RawFrame[i] == '*')
+            CheckByte = false;
+        if (CheckByte)
+            CalcChecksum ^= GPGLLDataFrame.RawFrame[i];
+        if (GPGLLDataFrame.RawFrame[i] == '$')
+        {
+            CheckByte = true;
+            CalcChecksum = 0;
+        }
+        if (GPGLLDataFrame.RawFrame[i] == ',' || GPGLLDataFrame.RawFrame[i] == '*')     // DataBegin
+        {
+            for (int j = i + 1; j < GPGLLDataFrame.RawFrame.length()
+                && GPGLLDataFrame.RawFrame[j] != ','
+                && GPGLLDataFrame.RawFrame[j] != '*'; j++)    // DataEnd
+                QueneEnd = j;
+            QueneData = GPGLLDataFrame.RawFrame.substr(i + 1, (QueneEnd - i) < 0 ? 0 : QueneEnd - i);
+
+            switch (QueneCnt)   // Transfer to struct
+            {
+            case 1:     // (1)
+                GPGLLDataFrame.latitude = QueneData;
+                break;
+            case 2:     // (2)
+                GPGLLDataFrame.NorS = QueneData;
+                break;
+            case 3:     // (3)
+                GPGLLDataFrame.longitude = QueneData;
+                break;
+            case 4:     // (4)
+                GPGLLDataFrame.EorW = QueneData;
+                break;
+            case 5:     // (5)
+                GPGLLDataFrame.UTCtime = QueneData;
+                break;
+            case 6:     // (6)
+                GPGLLDataFrame.status = QueneData;
+                break;
+            case 7:     // (7)
+                GPGLLDataFrame.model = QueneData;
+                break;
+            case 8:    // checksum
+                GetChecksum = GetCheckSum(QueneData);
+#if DEBUG_CALC == 1
+                cout << "GPS.GPGLLRefresh().GetChecksum : " << GetChecksum << endl;
+                cout << "GPS.GPGLLRefresh().CalcChecksum : " << CalcChecksum << endl;
+#endif
+                break;
+            }
+            QueneCnt++;
+        }
+    }
+    return 0;
+}
+
 int NMEA0183::GPGSARefresh()
 {
     int QueneEnd;
@@ -310,3 +374,4 @@ int NMEA0183::GPRMCRefresh()
     }
     return 0;
 }
+

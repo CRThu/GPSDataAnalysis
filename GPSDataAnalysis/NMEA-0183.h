@@ -39,6 +39,23 @@ struct GPGGA
     string DifferentalRef;     // (12) 差分参考基站标号      0000~1023
 };
 
+struct GPGLL
+{
+    //    $GPGLL,        (1)      ,(2),        (3)        ,(4),      (5)      ,(6),(7)* hh
+    //    $GPGLL, 3105.56366, N, 12131.98347, E, 102006.60, A, A * 6C
+    string RawFrame;
+    const string ProtocolCommand = "GPGLL";
+    const string ProtocolNameCN = "地理定位信息";
+    const string ProtocolNameEN = "Geographic Position";
+    string latitude;                       // (1) 纬度                         ddmm.mmmmm
+    string NorS;                           // (2) 纬度半球                   N/S
+    string longitude;                    // (3) 经度                         dddmm.mmmmm
+    string EorW;                          // (4) 经度半球                   E/W 
+    string UTCtime;                     // (5) UTC时间                   hhmmss.ss
+    string status;                         // (6) 定位状态                   A: 有效定位 /V: 无效定位
+    string model;                        // (7) 模式指示                   A: 自主定位 /D: 差分定位 /E: 估算 /N: 数据无效
+};
+
 struct GPGSA
 {
     // $GPGSA,(1),(2),        {(3.0),(3.1),...,(3.11)}       ,  (4)  ,  (5) ,  (6)   * hh
@@ -120,22 +137,6 @@ struct GPVTG
     string model;                  // (5) 模式指示                    A: 自主定位 /D: 差分定位 /E: 估算 /N: 数据无效
 };
 
-struct GPGLL
-{
-    //    $GPGLL,        (1)      ,(2),        (3)        ,(4),      (5)      ,(6),(7)* hh
-    //    $GPGLL, 3105.56366, N, 12131.98347, E, 102006.60, A, A * 6C
-    string RawFrame;
-    const string ProtocolCommand = "GPGLL";
-    const string ProtocolNameCN = "地理定位信息";
-    const string ProtocolNameEN = "Geographic Position";
-    string latitude;                       // (1) 纬度                         ddmm.mmmmm
-    string NorS;                           // (2) 纬度半球                   N/S
-    string longitude;                    // (3) 经度                         dddmm.mmmmm
-    string EorW;                          // (4) 经度半球                   E/W 
-    string UTCtime;                     // (5) UTC时间                   hhmmss.ss
-    string status;                         // (6) 定位状态                   A: 有效定位 /V: 无效定位
-    string model;                        // (7) 模式指示                   A: 自主定位 /D: 差分定位 /E: 估算 /N: 数据无效
-};
 
 class NMEA0183
 {
@@ -144,6 +145,7 @@ public:
     void CleanFrame();
     void TrimFrame(string &s);
     int SetFrame(string __GPSDataFrame);    // return Protocol Lines
+
     // GPGGA
     GPGGA GPGGADataFrame;
     int GPGGARefresh();
