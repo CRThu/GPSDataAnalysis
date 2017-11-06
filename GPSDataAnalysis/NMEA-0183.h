@@ -90,8 +90,6 @@ struct GPGSV
     const string ProtocolCommand = "GPGSV";
     const string ProtocolNameCN = "可见卫星数 ";
     const string ProtocolNameEN = "GPS Satellites in View";
-    string GSVall;                      // (1) GSV语句总数
-    string GSVnow;                   // (2) 本句GSV编号
     string SeeSatellitesNum;     // (3) 可见卫星总数
     vector<SatellitesInViewData> SatellitesData;
     //string Name;                    // (4) 卫星编号

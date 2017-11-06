@@ -1,6 +1,7 @@
 // Analysis GPS NMEA-0183 Protocol
 #include "stdafx.h"
 #include "NMEA-0183.h"
+using namespace std;
 
 int HexToInt(char _input)
 {
@@ -293,7 +294,73 @@ int NMEA0183::GPGSARefresh()
 
 int NMEA0183::GPGSVRefresh()
 {
-    // TODO
+    SatellitesInViewData SatTemp;
+    for (int n = 0; n < GPGSVDataFrame.RawFrame.size(); n++)
+    {
+        int QueneEnd;
+        string QueneData;
+        int QueneCnt = 1;
+        unsigned int GetChecksum;
+        unsigned int CalcChecksum = 0;
+        bool CheckByte = false;
+        for (int i = 0; i < GPGSVDataFrame.RawFrame[n].length(); i++)
+        {
+            if (GPGSVDataFrame.RawFrame[n][i] == '*')
+                CheckByte = false;
+            if (CheckByte)
+                CalcChecksum ^= GPGSVDataFrame.RawFrame[n][i];
+            if (GPGSVDataFrame.RawFrame[n][i] == '$')
+            {
+                CheckByte = true;
+                CalcChecksum = 0;
+            }
+            if (GPGSVDataFrame.RawFrame[n][i] == ',' || GPGSVDataFrame.RawFrame[n][i] == '*')     // DataBegin
+            {
+                for (int j = i + 1; j < GPGSVDataFrame.RawFrame[n].length()
+                    && GPGSVDataFrame.RawFrame[n][j] != ','
+                    && GPGSVDataFrame.RawFrame[n][j] != '*'; j++)    // DataEnd
+                    QueneEnd = j;
+                QueneData = GPGSVDataFrame.RawFrame[n].substr(i + 1, (QueneEnd - i) < 0 ? 0 : QueneEnd - i);
+
+                if (GPGSVDataFrame.RawFrame[n][i] == '*')
+                {
+                    GetChecksum = GetCheckSum(QueneData);
+#if DEBUG_CALC == 1
+                    cout << "GPS.GPGSVRefresh().GetChecksum : " << GetChecksum << endl;
+                    cout << "GPS.GPGSVRefresh().CalcChecksum : " << CalcChecksum << endl;
+#endif
+                }
+
+                switch (QueneCnt)   // Transfer to struct
+                {
+                case 1:     // (1)
+                    break;
+                case 2:     // (2)
+                    break;
+                case 3:     // (3)
+                    GPGSVDataFrame.SeeSatellitesNum = QueneData;
+                    break;
+                case 4:          case 5:         case 6:           case 7:
+                case 8:          case 9:         case 10:         case 11:
+                case 12:        case 13:       case 14:         case 15:
+                case 16:        case 17:       case 18:         case 19:
+                    if (QueneCnt % 4 == 0)
+                        SatTemp.Name = QueneData;
+                    if (QueneCnt % 4 == 1)
+                        SatTemp.AngleOfElevation = QueneData;
+                    if (QueneCnt % 4 == 2)
+                        SatTemp.AngleOfAzimuth = QueneData;
+                    if (QueneCnt % 4 == 3)
+                    {
+                        SatTemp.SNR = QueneData;
+                        GPGSVDataFrame.SatellitesData.push_back(SatTemp);
+                    }
+                    break;
+                }
+                QueneCnt++;
+            }
+        }
+    }
     return 0;
 }
 

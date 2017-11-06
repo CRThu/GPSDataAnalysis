@@ -1,15 +1,18 @@
 ﻿  NMEA-0183.cpp
 d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.h(2): warning C4067: 预处理器指令后有意外标记 - 应输入换行符
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(48): warning C4018: “<”: 有符号/无符号不匹配
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(92): warning C4018: “<”: 有符号/无符号不匹配
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(106): warning C4018: “<”: 有符号/无符号不匹配
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(175): warning C4018: “<”: 有符号/无符号不匹配
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(189): warning C4018: “<”: 有符号/无符号不匹配
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(239): warning C4018: “<”: 有符号/无符号不匹配
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(253): warning C4018: “<”: 有符号/无符号不匹配
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(308): warning C4018: “<”: 有符号/无符号不匹配
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(322): warning C4018: “<”: 有符号/无符号不匹配
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(387): warning C4018: “<”: 有符号/无符号不匹配
-d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(401): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(49): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(93): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(107): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(176): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(190): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(240): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(254): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(298): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(306): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(320): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(375): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(389): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(454): warning C4018: “<”: 有符号/无符号不匹配
+d:\program\c&cpp_2017\gpsdataanalysis\gpsdataanalysis\nmea-0183.cpp(468): warning C4018: “<”: 有符号/无符号不匹配
   GPSDataAnalysis.vcxproj -> D:\program\C&CPP_2017\GPSDataAnalysis\Debug\GPSDataAnalysis.exe
   GPSDataAnalysis.vcxproj -> D:\program\C&CPP_2017\GPSDataAnalysis\Debug\GPSDataAnalysis.pdb (Full PDB)

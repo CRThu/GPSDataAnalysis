@@ -22,7 +22,7 @@ int main()
 #endif
         GPS.GPGGARefresh();
         GPS.GPGSARefresh();
-        //GPS.GPGSVRefresh();
+        GPS.GPGSVRefresh();
         GPS.GPRMCRefresh();
         GPS.GPGLLRefresh();
         GPS.GPVTGRefresh();
