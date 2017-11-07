@@ -87,7 +87,7 @@ int NMEA0183::GPGGARefresh()
     int QueneEnd;
     string QueneData;
     int QueneCnt = 1;
-    unsigned int GetChecksum;
+    unsigned int GetChecksum = 0;
     unsigned int CalcChecksum = 0;
     bool CheckByte=false;
     for (int i = 0; i < GPGGADataFrame.RawFrame.length(); i++)
@@ -162,7 +162,7 @@ int NMEA0183::GPGGARefresh()
             QueneCnt++;
         }
     }
-    return 0;
+    return GetChecksum == CalcChecksum ? 0 : -1;
 }
 
 int NMEA0183::GPGLLRefresh()
@@ -170,7 +170,7 @@ int NMEA0183::GPGLLRefresh()
     int QueneEnd;
     string QueneData;
     int QueneCnt = 1;
-    unsigned int GetChecksum;
+    unsigned int GetChecksum = 0;
     unsigned int CalcChecksum = 0;
     bool CheckByte = false;
     for (int i = 0; i < GPGLLDataFrame.RawFrame.length(); i++)
@@ -226,7 +226,7 @@ int NMEA0183::GPGLLRefresh()
             QueneCnt++;
         }
     }
-    return 0;
+    return GetChecksum == CalcChecksum ? 0 : -1;
 }
 
 int NMEA0183::GPGSARefresh()
@@ -234,7 +234,7 @@ int NMEA0183::GPGSARefresh()
     int QueneEnd;
     string QueneData;
     int QueneCnt = 1;
-    unsigned int GetChecksum;
+    unsigned int GetChecksum = 0;
     unsigned int CalcChecksum = 0;
     bool CheckByte = false;
     for (int i = 0; i < GPGSADataFrame.RawFrame.length(); i++)
@@ -289,18 +289,19 @@ int NMEA0183::GPGSARefresh()
             QueneCnt++;
         }
     }
-    return 0;
+    return GetChecksum == CalcChecksum ? 0 : -1;
 }
 
 int NMEA0183::GPGSVRefresh()
 {
     SatellitesInViewData SatTemp;
+    int ChecksumFlag = 0;
     for (int n = 0; n < GPGSVDataFrame.RawFrame.size(); n++)
     {
         int QueneEnd;
         string QueneData;
         int QueneCnt = 1;
-        unsigned int GetChecksum;
+        unsigned int GetChecksum = 0;
         unsigned int CalcChecksum = 0;
         bool CheckByte = false;
         for (int i = 0; i < GPGSVDataFrame.RawFrame[n].length(); i++)
@@ -360,8 +361,9 @@ int NMEA0183::GPGSVRefresh()
                 QueneCnt++;
             }
         }
+        ChecksumFlag += (GetChecksum == CalcChecksum ? 0 : -1);
     }
-    return 0;
+    return ChecksumFlag == 0 ? 0 : -1;
 }
 
 int NMEA0183::GPRMCRefresh()
@@ -369,7 +371,7 @@ int NMEA0183::GPRMCRefresh()
     int QueneEnd;
     string QueneData;
     int QueneCnt = 1;
-    unsigned int GetChecksum;
+    unsigned int GetChecksum = 0;
     unsigned int CalcChecksum = 0;
     bool CheckByte = false;
     for (int i = 0; i < GPRMCDataFrame.RawFrame.length(); i++)
@@ -440,7 +442,7 @@ int NMEA0183::GPRMCRefresh()
             QueneCnt++;
         }
     }
-    return 0;
+    return GetChecksum == CalcChecksum ? 0 : -1;
 }
 
 int NMEA0183::GPVTGRefresh()
@@ -448,7 +450,7 @@ int NMEA0183::GPVTGRefresh()
     int QueneEnd;
     string QueneData;
     int QueneCnt = 1;
-    unsigned int GetChecksum;
+    unsigned int GetChecksum = 0;
     unsigned int CalcChecksum = 0;
     bool CheckByte = false;
     for (int i = 0; i < GPVTGDataFrame.RawFrame.length(); i++)
@@ -506,6 +508,6 @@ int NMEA0183::GPVTGRefresh()
             QueneCnt++;
         }
     }
-    return 0;
+    return GetChecksum == CalcChecksum ? 0 : -1;
 }
 

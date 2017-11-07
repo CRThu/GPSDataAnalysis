@@ -2,7 +2,7 @@
 #ifndef NMEA-0183
 #include "stdafx.h"
 
-#define DEBUG_CALC 1
+//#define DEBUG_CALC 1
 
 //    GPS Frame Example : 
 //    

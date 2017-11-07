@@ -17,16 +17,14 @@ int main()
         $GPGLL, 3359.08811, N, 11850.91461, E, 232530.00, A, A * 66";
     NMEA0183 GPS;
     GPS.CleanFrame();
-#if DEBUG_CALC == 1
         cout << "return GPS.SetFrame(data) : " << GPS.SetFrame(data) << endl;
-#endif
-        GPS.GPGGARefresh();
-        GPS.GPGSARefresh();
-        GPS.GPGSVRefresh();
-        GPS.GPRMCRefresh();
-        GPS.GPGLLRefresh();
-        GPS.GPVTGRefresh();
-    //cout << GPS.GPGGADataFrame.ProtocolNameCN;
+        cout << "return GPS.GPGGARefresh() : " << GPS.GPGGARefresh()<<endl;
+        cout << "return GPS.GPGSARefresh() : " << GPS.GPGSARefresh() << endl;
+        cout << "return GPS.GPGSVRefresh() : " << GPS.GPGSVRefresh() << endl;
+        cout << "return GPS.GPRMCRefresh() : " << GPS.GPRMCRefresh() << endl;
+        cout << "return GPS.GPGLLRefresh() : " << GPS.GPGLLRefresh() << endl;
+        cout << "return GPS.GPVTGRefresh() : " << GPS.GPVTGRefresh() << endl;
+    cout << GPS.GPGGADataFrame.ProtocolNameCN;
     getchar();
     return 0;
 }
